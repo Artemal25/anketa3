@@ -8,6 +8,36 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <style>
+        .db-screenshots {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        .db-screenshots h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffcc88;
+        }
+        .screenshot-item {
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .screenshot-item img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 1px solid #5a7c9e;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .screenshot-item p {
+            margin-top: 10px;
+            color: #ddd;
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
 <body>
 <div class="gradient-bg"></div>
@@ -94,6 +124,44 @@
 
         <button type="submit">Сохранить</button>
     </form>
+
+    <!-- Блок с описанием работы с базой данных и скриншотами -->
+    <div class="db-screenshots">
+        <h3> Работа с базой данных</h3>
+
+        <div class="screenshot-item">
+            <img src="1.png" alt="Создание таблиц">
+            <p><strong>Шаг 1 – Создание таблиц</strong><br>
+            Созданы три таблицы: <code>application</code> (анкеты), <code>language</code> (языки программирования) 
+            и <code>application_language</code> (связь многие-ко-многим). Таблицы используют движок InnoDB, 
+            кодировку utf8mb4, внешние ключи с каскадным удалением. Поля соответствуют требованиям задания.</p>
+        </div>
+
+        <div class="screenshot-item">
+            <img src="2.png" alt="Заполнение таблицы language">
+            <p><strong>Шаг 2 – Заполнение справочника языков</strong><br>
+            В таблицу <code>language</code> вставлены все допустимые языки программирования согласно заданию 
+            (Pascal, C, C++, JavaScript, PHP, Python, Java, Haskell, Clojure, Prolog, Scala, Go) 
+            а также дополнительные языки для расширения функциональности.</p>
+        </div>
+
+        <div class="screenshot-item">
+            <img src="3.png" alt="Результат SELECT * FROM application">
+            <p><strong>Шаг 3 – Просмотр сохранённых анкет</strong><br>
+            Команда <code>SELECT * FROM application</code> показывает все записи, которые были успешно 
+            сохранены через форму. Каждая запись имеет уникальный ID, ФИО, телефон, email, дату рождения, 
+            пол, биографию, отметку о согласии с контрактом и timestamp создания. Языки программирования 
+            хранятся в связанной таблице <code>application_language</code>.</p>
+        </div>
+
+        <div class="screenshot-item">
+            <p style="text-align: center; font-style: italic; color: #aaa;">
+                База данных приведена к третьей нормальной форме (3НФ). 
+                Все запросы к БД выполняются с использованием подготовленных выражений (prepared statements) 
+                для защиты от SQL-инъекций.
+            </p>
+        </div>
+    </div>
 
     <div class="site-footer">
         <p>ЛАБОРАТОРНАЯ РАБОТА №3</p>
