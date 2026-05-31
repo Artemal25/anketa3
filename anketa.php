@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Анкета | Лабораторная работа №3</title>
+    <title>Лабораторная работа №3</title>
     <link rel="icon" type="image/x-icon" href="j.ico">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
@@ -28,90 +28,68 @@
         </div>
     </div>
 
-    <?php if (!empty($messages)): ?>
-        <?php foreach ($messages as $msg): ?>
-            <?= $msg ?>
+    <?php if (!empty($success_message)): ?>
+        <div class="success-message"><?= htmlspecialchars($success_message) ?></div>
+    <?php endif; ?>
+
+    <?php if (!empty($errors)): ?>
+        <?php foreach ($errors as $error): ?>
+            <div class="error-message"><?= htmlspecialchars($error) ?></div>
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <form method="post" action="index.php" id="mainForm">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-
+    <form method="post" action="index.php">
         <div class="form-group">
-            <label>ФИО</label>
-            <input type="text" name="full_name" value="<?= htmlspecialchars($values['full_name'] ?? '') ?>"
-                   <?= !empty($errors['full_name']) ? 'class="error"' : '' ?>>
-            <?php if (!empty($errors['full_name'])): ?>
-                <span class="field-error">Некорректное ФИО</span>
-            <?php endif; ?>
+            <label>ФИО *</label>
+            <input type="text" name="full_name" value="<?= htmlspecialchars($form_data['full_name']) ?>"
+                   <?= isset($errors['full_name']) ? 'class="error"' : '' ?>>
         </div>
 
         <div class="form-group">
-            <label>Телефон</label>
-            <input type="tel" name="phone" value="<?= htmlspecialchars($values['phone'] ?? '') ?>"
-                   <?= !empty($errors['phone']) ? 'class="error"' : '' ?>>
-            <?php if (!empty($errors['phone'])): ?>
-                <span class="field-error">Некорректный телефон</span>
-            <?php endif; ?>
+            <label>Телефон *</label>
+            <input type="tel" name="phone" value="<?= htmlspecialchars($form_data['phone']) ?>"
+                   <?= isset($errors['phone']) ? 'class="error"' : '' ?>>
         </div>
 
         <div class="form-group">
-            <label>E-mail</label>
-            <input type="email" name="email" value="<?= htmlspecialchars($values['email'] ?? '') ?>"
-                   <?= !empty($errors['email']) ? 'class="error"' : '' ?>>
-            <?php if (!empty($errors['email'])): ?>
-                <span class="field-error">Некорректный email</span>
-            <?php endif; ?>
+            <label>E-mail *</label>
+            <input type="email" name="email" value="<?= htmlspecialchars($form_data['email']) ?>"
+                   <?= isset($errors['email']) ? 'class="error"' : '' ?>>
         </div>
 
         <div class="form-group">
-            <label>Дата рождения</label>
-            <input type="date" name="birth_date" value="<?= htmlspecialchars($values['birth_date'] ?? '') ?>"
-                   <?= !empty($errors['birth_date']) ? 'class="error"' : '' ?>>
-            <?php if (!empty($errors['birth_date'])): ?>
-                <span class="field-error">Некорректная дата</span>
-            <?php endif; ?>
+            <label>Дата рождения *</label>
+            <input type="date" name="birth_date" value="<?= htmlspecialchars($form_data['birth_date']) ?>"
+                   <?= isset($errors['birth_date']) ? 'class="error"' : '' ?>>
         </div>
 
         <div class="form-group">
-            <label>Пол</label>
+            <label>Пол *</label>
             <div class="radio-group">
-                <label><input type="radio" name="gender" value="male" <?= ($values['gender'] ?? '') === 'male' ? 'checked' : '' ?>> Мужской</label>
-                <label><input type="radio" name="gender" value="female" <?= ($values['gender'] ?? '') === 'female' ? 'checked' : '' ?>> Женский</label>
+                <label><input type="radio" name="gender" value="male" <?= $form_data['gender'] === 'male' ? 'checked' : '' ?>> Мужской</label>
+                <label><input type="radio" name="gender" value="female" <?= $form_data['gender'] === 'female' ? 'checked' : '' ?>> Женский</label>
             </div>
-            <?php if (!empty($errors['gender'])): ?>
-                <span class="field-error">Выберите пол</span>
-            <?php endif; ?>
         </div>
 
         <div class="form-group">
-            <label>Любимые языки программирования</label>
+            <label>Любимые языки программирования *</label>
             <select name="languages[]" multiple size="8">
                 <?php foreach ($languages_from_db as $lang): ?>
-                    <option value="<?= htmlspecialchars($lang) ?>" <?= in_array($lang, $values['languages'] ?? []) ? 'selected' : '' ?>><?= htmlspecialchars($lang) ?></option>
+                    <option value="<?= htmlspecialchars($lang) ?>" <?= in_array($lang, $form_data['languages']) ? 'selected' : '' ?>><?= htmlspecialchars($lang) ?></option>
                 <?php endforeach; ?>
             </select>
-            <?php if (!empty($errors['languages'])): ?>
-                <span class="field-error">Выберите хотя бы один язык</span>
-            <?php endif; ?>
         </div>
 
         <div class="form-group">
             <label>Биография</label>
-            <textarea name="biography" rows="5"><?= htmlspecialchars($values['biography'] ?? '') ?></textarea>
-            <?php if (!empty($errors['biography'])): ?>
-                <span class="field-error">Биография слишком длинная</span>
-            <?php endif; ?>
+            <textarea name="biography" rows="5"><?= htmlspecialchars($form_data['biography']) ?></textarea>
         </div>
 
         <div class="form-group checkbox">
             <label>
-                <input type="checkbox" name="contract_accepted" value="1" <?= !empty($values['contract_accepted']) ? 'checked' : '' ?>>
-                Я ознакомлен(а) с контрактом
+                <input type="checkbox" name="contract_accepted" value="1" <?= $form_data['contract_accepted'] ? 'checked' : '' ?>>
+                Я ознакомлен(а) с контрактом *
             </label>
-            <?php if (!empty($errors['contract_accepted'])): ?>
-                <span class="field-error">Необходимо подтвердить согласие</span>
-            <?php endif; ?>
         </div>
 
         <button type="submit">Сохранить</button>
@@ -123,7 +101,6 @@
 </div>
 
 <script>
-    // tsParticles – звёзды с линиями
     tsParticles.load({
         id: "tsparticles",
         options: {
@@ -164,7 +141,6 @@
         },
     });
 
-    
     window.addEventListener('load', function() {
         if (document.querySelector('.success-message')) {
             canvasConfetti({
@@ -174,20 +150,8 @@
                 startVelocity: 20,
                 colors: ['#2c4c8c', '#5a7c9e', '#ffffff']
             });
-            setTimeout(() => {
-                canvasConfetti({
-                    particleCount: 100,
-                    spread: 100,
-                    origin: { y: 0.5, x: 0.3 },
-                });
-            }, 150);
-            setTimeout(() => {
-                canvasConfetti({
-                    particleCount: 100,
-                    spread: 100,
-                    origin: { y: 0.5, x: 0.7 },
-                });
-            }, 300);
+            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.3 } }), 150);
+            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.7 } }), 300);
         }
     });
 </script>
