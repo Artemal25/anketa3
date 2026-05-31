@@ -27,9 +27,8 @@ try {
     <title>Сохранённые анкеты</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        h1 { margin-bottom: 20px; }
-        .back-link { margin-top: 30px; }
-         .table-wrapper {
+        /* Дополнительные стили для страницы v.php */
+        .table-wrapper {
             overflow-x: auto;
             margin: 20px 0;
             border-radius: 20px;
@@ -97,35 +96,53 @@ try {
 
 <div class="container">
     <div class="site-header">
-        <h1>Сохранённые анкеты</h1>
+        <div class="header-left">
+            <img src="image.jpg" alt="User photo" class="profile-photo">
+            <h1>Сохранённые анкеты</h1>
+        </div>
         <div class="nav-links">
             <a href="index.php">Форма</a>
-            
         </div>
     </div>
 
-    <p>Всего записей: <?= count($applications) ?></p>
+    <p>Всего записей: <strong><?= count($applications) ?></strong></p>
 
-    <table>
-        <thead>
-            <tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Дата рождения</th><th>Пол</th><th>Языки</th><th>Биография</th><th>Дата создания</th></tr>
-        </thead>
-        <tbody>
-        <?php foreach ($applications as $app): ?>
-            <tr>
-                <td><?= htmlspecialchars($app['id']) ?></td>
-                <td><?= htmlspecialchars($app['full_name']) ?></td>
-                <td><?= htmlspecialchars($app['phone']) ?></td>
-                <td><?= htmlspecialchars($app['email']) ?></td>
-                <td><?= htmlspecialchars($app['birth_date']) ?></td>
-                <td><?= $app['gender'] === 'male' ? 'Мужской' : 'Женский' ?></td>
-                <td><?= htmlspecialchars($app['languages']) ?></td>
-                <td><?= nl2br(htmlspecialchars($app['biography'])) ?></td>
-                <td><?= htmlspecialchars($app['created_at']) ?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="table-wrapper">
+        <table class="anketa-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ФИО</th>
+                    <th>Телефон</th>
+                    <th>Email</th>
+                    <th>Дата рождения</th>
+                    <th>Пол</th>
+                    <th>Языки</th>
+                    <th>Биография</th>
+                    <th>Дата создания</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if (empty($applications)): ?>
+                <tr><td colspan="9" style="text-align: center;">Нет сохранённых анкет</td></tr>
+            <?php else: ?>
+                <?php foreach ($applications as $app): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($app['id']) ?></td>
+                        <td><?= htmlspecialchars($app['full_name']) ?></td>
+                        <td><?= htmlspecialchars($app['phone']) ?></td>
+                        <td><?= htmlspecialchars($app['email']) ?></td>
+                        <td><?= htmlspecialchars($app['birth_date']) ?></td>
+                        <td><?= $app['gender'] === 'male' ? 'Мужской' : 'Женский' ?></td>
+                        <td><?= htmlspecialchars($app['languages'] ?: '—') ?></td>
+                        <td><?= nl2br(htmlspecialchars($app['biography'] ?? '')) ?></td>
+                        <td><?= date('d.m.Y H:i', strtotime($app['created_at'])) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
     <div class="back-link">
         <a href="index.php">← Вернуться к форме</a>
